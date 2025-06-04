@@ -33,5 +33,3 @@ This project demonstrates federated learning for rare variant association studie
 - Tracks and saves global and local model performance after each round.
 - Automatically generates clear, plots for all key metrics.
 - Demonstrates the benefit of federated learning over local-only training.
-
-For more details, see comments in each script. 
