@@ -1,0 +1,285 @@
+--- Federated Learning Simulation Log (DeepRVAT-Inspired) ---
+
+[Phase 0: Configuration Parameters]
+  Device: mps
+  Number of Clients (NUM_CLIENTS): 4
+  Individuals per Client (NUM_INDIVIDUALS_PER_CLIENT): 150
+  Raw Variants per Individual (NUM_VARIANTS_RAW_PER_INDIVIDUAL): 50
+  Max Variants per Individual after processing (MAX_VARIANTS_PER_INDIVIDUAL): 25
+  Number of Features per Variant (NUM_FEATURES): 35
+  Number of Communication Rounds (NUM_ROUNDS): 10
+  Local Epochs per Client (LOCAL_EPOCHS): 10
+  Batch Size (BATCH_SIZE): 16
+  Client Learning Rate (CLIENT_LEARNING_RATE): 0.0001
+  Server Learning Rate (SERVER_LEARNING_RATE): 1.0
+  Differential Privacy Enabled (DP_ENABLED): True
+    DP Noise Multiplier (DP_NOISE_MULTIPLIER): 0.05
+    DP Clip Norm (DP_CLIP_NORM): 2.0
+
+[Phase 1: Data Preparation]
+Generating and preprocessing data for 4 clients...
+
+  Generating raw data for client_1 (150 individuals, 50 variants each before filtering)...
+  Preprocessing data for client_1 (MAX_VARIANTS_PER_INDIVIDUAL=25, NUM_FEATURES=35)...
+  client_1: Processed X shape: torch.Size([93, 25, 35]), y shape: torch.Size([93, 1])
+  Generating raw data for client_2 (150 individuals, 50 variants each before filtering)...
+  Preprocessing data for client_2 (MAX_VARIANTS_PER_INDIVIDUAL=25, NUM_FEATURES=35)...
+  client_2: Processed X shape: torch.Size([92, 25, 35]), y shape: torch.Size([92, 1])
+  Generating raw data for client_3 (150 individuals, 50 variants each before filtering)...
+  Preprocessing data for client_3 (MAX_VARIANTS_PER_INDIVIDUAL=25, NUM_FEATURES=35)...
+  client_3: Processed X shape: torch.Size([93, 25, 35]), y shape: torch.Size([93, 1])
+  Generating raw data for client_4 (150 individuals, 50 variants each before filtering)...
+  Preprocessing data for client_4 (MAX_VARIANTS_PER_INDIVIDUAL=25, NUM_FEATURES=35)...
+  client_4: Processed X shape: torch.Size([97, 25, 35]), y shape: torch.Size([97, 1])
+Using all processed client data as a consolidated test set for evaluation: X_test shape torch.Size([375, 25, 35]), y_test shape torch.Size([375, 1])
+
+[Phase 1b: Local-Only Baseline (No FL)]
+  Client 1 Local-Only Baseline: Initial MSE=3538.29, R2=-3.61; Final MSE=656.91, R2=0.14
+  Client 2 Local-Only Baseline: Initial MSE=3936.25, R2=-5.10; Final MSE=618.73, R2=0.04
+  Client 3 Local-Only Baseline: Initial MSE=3161.41, R2=-4.82; Final MSE=473.07, R2=0.13
+  Client 4 Local-Only Baseline: Initial MSE=3767.70, R2=-5.33; Final MSE=563.70, R2=0.05
+
+[Phase 2: Model Initialization]
+Global DeepRVAT-inspired model created.
+Model Architecture:
+DeepRVATInspiredNet(
+  (conv1): Conv1d(35, 32, kernel_size=(3,), stride=(1,), padding=(1,))
+  (bn1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (pool1): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv2): Conv1d(32, 64, kernel_size=(3,), stride=(1,), padding=(1,))
+  (bn2): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (pool2): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (adaptive_pool): AdaptiveAvgPool1d(output_size=4)
+  (fc1): Linear(in_features=256, out_features=128, bias=True)
+  (dropout): Dropout(p=0.3, inplace=False)
+  (fc2): Linear(in_features=128, out_features=1, bias=True)
+)
+
+Evaluating Initial Global Model (Untrained)...
+Initial Global Model - Test MSE: 3607.4864, Test R2: -4.6003, Avg Test Loss: 3607.4863
+
+[Phase 3: Federated Training]
+
+--- Round 1/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 1 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 1...
+Round 1 - Test MSE: 3595.6042, Test R2: -4.5819, Avg Test Loss: 3595.6042
+
+--- Round 2/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 2 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 2...
+Round 2 - Test MSE: 3566.7874, Test R2: -4.5371, Avg Test Loss: 3566.7874
+
+--- Round 3/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 3 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 3...
+Round 3 - Test MSE: 3446.7181, Test R2: -4.3507, Avg Test Loss: 3446.7182
+
+--- Round 4/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 4 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 4...
+Round 4 - Test MSE: 3168.5967, Test R2: -3.9190, Avg Test Loss: 3168.5967
+
+--- Round 5/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 5 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 5...
+Round 5 - Test MSE: 2980.5174, Test R2: -3.6270, Avg Test Loss: 2980.5174
+
+--- Round 6/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 6 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 6...
+Round 6 - Test MSE: 2671.5288, Test R2: -3.1473, Avg Test Loss: 2671.5287
+
+--- Round 7/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 7 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 7...
+Round 7 - Test MSE: 2280.9159, Test R2: -2.5409, Avg Test Loss: 2280.9159
+
+--- Round 8/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 8 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 8...
+Round 8 - Test MSE: 1811.7856, Test R2: -1.8126, Avg Test Loss: 1811.7856
+
+--- Round 9/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 9 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 9...
+Round 9 - Test MSE: 1170.6327, Test R2: -0.8173, Avg Test Loss: 1170.6328
+
+--- Round 10/10 ---
+  Client 1/4 training (93 samples)...
+    Client 1 upload size: 1.41 KB
+  Client 2/4 training (92 samples)...
+    Client 2 upload size: 1.41 KB
+  Client 3/4 training (93 samples)...
+    Client 3 upload size: 1.41 KB
+  Client 4/4 training (97 samples)...
+    Client 4 upload size: 1.41 KB
+  Server aggregating updates from 4 clients...
+  Round 10 aggregation complete.
+  Total bandwidth for this round (uploads): 0.005 MB
+
+  Evaluating Global Model after Round 10...
+Round 10 - Test MSE: 856.5057, Test R2: -0.3297, Avg Test Loss: 856.5057
+
+--- Federated Learning Simulation End ---
+
+[Phase 4: Final Evaluation]
+Final Global Model - Test MSE: 856.5057, Test R2: -0.3297, Avg Test Loss: 856.5057
+
+--- Federated Learning Performance Summary ---
+
+Global Model:
+  - Initial MSE: 3607.49, R²: -4.60
+  - Final MSE: 856.51, R²: -0.33
+  - Improvement: MSE ↓ 2750.98, R² ↑ 4.27
+
+Local Models (Averaged Across Clients):
+  - Initial Avg MSE: 3466.94, R²: -4.50
+  - Final Avg MSE: 1088.11, R²: -0.71
+  - Improvement: MSE ↓ 2378.82, R² ↑ 3.79
+
+Local-Only Baseline (Averaged Across Clients):
+  - Initial Avg MSE: 3600.91, R²: -4.71
+  - Final Avg MSE: 578.10, R²: 0.09
+  - Improvement: MSE ↓ 3022.81, R² ↑ 4.80
+
+Federated learning enables all clients to benefit from the collective data, improving both global and local model performance, while keeping raw data private.
+
+--- Key Concepts Demonstrated (DeepRVAT-Inspired FL) ---
+
+1. Federated Training for Genomic Data (Simulated):
+   - Global model (DeepRVAT-inspired 1D CNN) initialized by the server.
+   - Model weights distributed to clients.
+   - Clients generate synthetic genomic data, preprocess it (filtering, padding), and train locally.
+   - Clients send model *updates* (weight deltas) back to the server.
+   - Server aggregates updates (Federated Averaging) to form the new global model.
+   - Evaluation uses regression metrics (MSE, R2) and true vs. predicted plots.
+
+2. Data Handling for Sequential Genomic Features:
+   - `data_generator.py` creates synthetic variants and phenotypes.
+   - `data_utils_deeprvat.py` preprocesses this: filters variants (e.g., MAF, CADD score), pads/truncates to `MAX_VARIANTS_PER_INDIVIDUAL=25` with `NUM_FEATURES=35`.
+   - This creates fixed-size tensors suitable for the 1D CNN.
+
+3. Model Architecture (DeepRVATInspiredNet):
+   - A 1D CNN designed to process sequences of variant features.
+   - Input: (batch_size, MAX_VARIANTS_PER_INDIVIDUAL, NUM_FEATURES).
+   - Output: A single continuous value (phenotype prediction).
+   - Sized to be runnable on a MacBook Air M3.
+
+4. Tuning Aspects:
+   - `NUM_ROUNDS` (10), `LOCAL_EPOCHS` (10), learning rates, `BATCH_SIZE` (16) are key hyperparameters.
+   - `NUM_INDIVIDUALS_PER_CLIENT` (150) and filtering criteria in `data_utils_deeprvat.py` heavily impact data quality and quantity per client.
+   - `MAX_VARIANTS_PER_INDIVIDUAL` (25) affects model input size and memory.
+
+5. Data Privacy (Simplified Differential Privacy):
+   - DP is ENABLED: noise multiplier 0.05, clip norm 2.0.
+   - Deltas are clipped and noised. Trade-off between privacy and model utility (MSE/R2).
+
+6. Bandwidth Calculation:
+   - Estimated size of one full model (weights): 1.41 KB
+   - Bandwidth per round logged (sum of client delta sizes).
+
+--- Further Exploration ---
+   - Implement more sophisticated variant filtering or feature engineering.
+   - Experiment with different 1D CNN architectures, attention mechanisms, or RNNs for the local model.
+   - Explore non-IID data distributions more explicitly (e.g., different allele frequencies or effect sizes per client).
+   - Rigorous hyperparameter tuning for FL and DP parameters.
